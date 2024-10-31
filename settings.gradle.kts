@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Ghost Tracker"
 include(":app")
- 
+
+include(":app", ":opencv")
+project(":opencv").projectDir = file("libs/OpenCV-android-sdk/sdk")
+
