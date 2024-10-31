@@ -11,9 +11,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private SensorConfig sensorConfig;
     private CompassSensor compassSensor;
-
+    private MediaPlayer mediaPlayer;
     private Map<String, Sensor> sensorsList;
 
     private Button greenBtn;
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorConfig = new SensorConfigImpl();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         compassSensor = new CompassSensorImpl();
+        mediaPlayer = MediaPlayer.create(this, R.raw.emfsound);
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -71,11 +72,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         findButtons();
         setBaseOpacity();
 
-        //TODO - Test for color changes. To delete
-        greenBtn.setOnClickListener(v -> changeLight(yellowBtn));
-        yellowBtn.setOnClickListener(v -> changeLight(orangeBtn));
-        orangeBtn.setOnClickListener(v -> changeLight(redBtn));
-        redBtn.setOnClickListener(v -> changeLight(greenBtn));
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
     }
 
     private void findButtons() {
