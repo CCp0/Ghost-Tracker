@@ -1,5 +1,8 @@
 package com.example.ghosttracker;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -9,22 +12,35 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.List;
+import com.example.ghosttracker.sensors.config.SensorConfig;
+import com.example.ghosttracker.sensors.config.SensorConfigImpl;
+
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button greenBtn;
+    private static final Float BASE_OPACITY = 0.2F;
 
-    Button yellowBtn;
+    private SensorManager sensorManager;
 
-    Button orangeBtn;
+    private SensorConfig sensorConfig;
 
-    Button redBtn;
+    private Map<String, Sensor> sensorsList;
 
-    final Float baseOpacity = 0.2F;
+    private Button greenBtn;
+
+    private Button yellowBtn;
+
+    private Button orangeBtn;
+
+    private Button redBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //FOR SENSOR - PASS INTO THEIR INTERFACES ON CREATE
+        sensorConfig = new SensorConfigImpl();
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -34,18 +50,24 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        greenBtn = findViewById(R.id.greenBtn);
-        yellowBtn = findViewById(R.id.yellowBtn);
-        orangeBtn = findViewById(R.id.orangeBtn);
-        redBtn = findViewById(R.id.redBtn);
+        sensorsList = sensorConfig.createSensors(sensorManager);
 
+        findButtons();
         setBaseOpacity();
-        //Test for color changes
+
+        //TODO - Test for color changes. To delete
         greenBtn.setOnClickListener(v -> changeLight(yellowBtn));
         yellowBtn.setOnClickListener(v -> changeLight(orangeBtn));
         orangeBtn.setOnClickListener(v -> changeLight(redBtn));
         redBtn.setOnClickListener(v -> changeLight(greenBtn));
 
+    }
+
+    private void findButtons() {
+        greenBtn = findViewById(R.id.greenBtn);
+        yellowBtn = findViewById(R.id.yellowBtn);
+        orangeBtn = findViewById(R.id.orangeBtn);
+        redBtn = findViewById(R.id.redBtn);
     }
 
     public void changeLight(Button btn) {
@@ -57,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setBaseOpacity() {
-        greenBtn.setAlpha(baseOpacity);
-        yellowBtn.setAlpha(baseOpacity);
-        orangeBtn.setAlpha(baseOpacity);
-        redBtn.setAlpha(baseOpacity);
+        greenBtn.setAlpha(BASE_OPACITY);
+        yellowBtn.setAlpha(BASE_OPACITY);
+        orangeBtn.setAlpha(BASE_OPACITY);
+        redBtn.setAlpha(BASE_OPACITY);
     }
 }
