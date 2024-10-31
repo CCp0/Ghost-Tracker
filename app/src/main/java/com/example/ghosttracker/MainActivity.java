@@ -52,13 +52,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         //FOR SENSOR - PASS INTO THEIR INTERFACES ON CREATE
         sensorConfig = new SensorConfigImpl();
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         compassSensor = new CompassSensorImpl();
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mediaPlayer = MediaPlayer.create(this, R.raw.emfsound);
 
-        super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
